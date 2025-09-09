@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:gap/gap.dart';
+import 'package:taskarti/hive/hive.dart';
 import 'package:taskarti/utils/ConstantFonts.dart';
 import 'package:taskarti/utils/ConstantsColors.dart';
 
@@ -17,7 +18,7 @@ class _SplashscreenState extends State<Splashscreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, "A");
+    KHive.popUserBox(KHive.boolKey)!=null?Navigator.pushReplacementNamed(context, "B"):Navigator.pushReplacementNamed(context, "A");
     });
   }
 

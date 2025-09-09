@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:taskarti/Widget/widget.dart';
+import 'package:taskarti/hive/hive.dart';
 import 'package:taskarti/utils/ConstantIcons.dart';
 import 'package:taskarti/utils/ConstantsColors.dart';
 
@@ -17,8 +18,8 @@ class Pickerimage extends StatefulWidget {
 
 class _PickerimageState extends State<Pickerimage> {
   ImagePicker pick = ImagePicker();
-   TextEditingController nameController = TextEditingController();
-     
+  TextEditingController nameController = TextEditingController();
+
   var image;
   @override
   void initState() {
@@ -33,26 +34,29 @@ class _PickerimageState extends State<Pickerimage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: InkWell(onTap: () {
-              if(nameController.text.isEmpty &&  image!=null){
-              Msnackbar("Inavlid Name");
-              }
-              else if(nameController.text.isNotEmpty &&  image==null){
-              Msnackbar("Inesert Image");
-              }
-              else if(nameController.text.isEmpty &&  image==null){
-              Msnackbar("Inesert Image And Name");
-              }
-             else if(nameController.text.isNotEmpty && image!=null){
-                Navigator.pushReplacementNamed(context,"B");
-              }
-            },child: Text("Done")),
+            child: InkWell(
+              onTap: ()async {
+                if (nameController.text.isEmpty && image != null) {
+                  Msnackbar("Inavlid Name");
+                } else if (nameController.text.isNotEmpty && image == null) {
+                  Msnackbar("Inesert Image");
+                } else if (nameController.text.isEmpty && image == null) {
+                  Msnackbar("Inesert Image And Name");
+                } else if (nameController.text.isNotEmpty && image != null) {
+                KHive.pushUserBox(KHive.nameKey, nameController.text);
+                KHive.pushUserBox(KHive.imageKey, image);
+                KHive.pushUserBox(KHive.boolKey,true);
+                  Navigator.pushReplacementNamed(context, "B");
+                }
+              },
+              child: Text("Done"),
+            ),
           ),
-        
         ],
       ),
       body: Center(
-        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -84,7 +88,10 @@ class _PickerimageState extends State<Pickerimage> {
               const Gap(15),
               Divider(indent: 16, endIndent: 16),
               const Gap(15),
-              CustomTextFormField(controller: nameController,hint: "Enter your name",),
+              CustomTextFormField(
+                controller: nameController,
+                hint: "Enter your name",
+              ),
             ],
           ),
         ),
@@ -99,9 +106,13 @@ class _PickerimageState extends State<Pickerimage> {
       });
     }
   }
-  void Msnackbar(String text){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text,textAlign:TextAlign.center ,),duration: Duration(seconds: 2),));
+
+  void Msnackbar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text, textAlign: TextAlign.center),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
-
-

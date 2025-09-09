@@ -14,13 +14,15 @@ class CustomElevatedButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    required this.horozantialPadding,this.width =double.infinity,this.height=48
+    required this.horozantialPadding,
+    this.width = double.infinity,
+    this.height = 48,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width:width,
+      width: width,
       height: height,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: horozantialPadding),
@@ -30,8 +32,8 @@ class CustomElevatedButton extends StatelessWidget {
             foregroundColor: Kcolors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              
-            ),padding: EdgeInsets.all(0)
+            ),
+            padding: EdgeInsets.all(0),
           ),
           onPressed: onPressed,
           child: Text(text),
@@ -42,24 +44,38 @@ class CustomElevatedButton extends StatelessWidget {
 }
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({super.key, this.controller, this.hint="",this.maxLines=1, this.suffixIcon,this.readOnly=false});
+  CustomTextFormField({
+    super.key,
+    this.controller,
+    this.hint = "",
+    this.maxLines = 1,
+    this.suffixIcon,
+    this.readOnly = false,  this.onTap,
+  });
   final int maxLines;
- final String hint;
- final Widget? suffixIcon;
- final bool readOnly ; 
-  final InputBorder? inputBorder =  OutlineInputBorder(borderRadius: BorderRadius.circular(10,),borderSide: BorderSide(color: Kcolors.maiColor));
-final TextEditingController? controller;
+  final String hint;
+  final Widget? suffixIcon;
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final InputBorder? inputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide(color: Kcolors.maiColor),
+  );
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(controller: controller,
-        decoration: InputDecoration(hintText: hint,
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hint,
         border: inputBorder,
-          enabledBorder: inputBorder,
-          focusedBorder:inputBorder,
-         suffixIcon: suffixIcon
-        ),
-        readOnly:readOnly ,
-        maxLines: maxLines,
+        enabledBorder: inputBorder,
+        focusedBorder: inputBorder,
+        suffixIcon: suffixIcon,
+      ),
+      readOnly: readOnly,
+      onTap: onTap,
+      maxLines: maxLines,
     );
   }
 }
