@@ -35,7 +35,7 @@ class _PickerimageState extends State<Pickerimage> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: InkWell(
-              onTap: ()async {
+              onTap: () async {
                 if (nameController.text.isEmpty && image != null) {
                   Msnackbar("Inavlid Name");
                 } else if (nameController.text.isNotEmpty && image == null) {
@@ -43,9 +43,9 @@ class _PickerimageState extends State<Pickerimage> {
                 } else if (nameController.text.isEmpty && image == null) {
                   Msnackbar("Inesert Image And Name");
                 } else if (nameController.text.isNotEmpty && image != null) {
-                KHive.pushUserBox(KHive.nameKey, nameController.text);
-                KHive.pushUserBox(KHive.imageKey, image);
-                KHive.pushUserBox(KHive.boolKey,true);
+                  KHive.pushUserBox(KHive.nameKey, nameController.text);
+                  KHive.pushUserBox(KHive.imageKey, image);
+                  KHive.pushUserBox(KHive.boolKey, true);
                   Navigator.pushReplacementNamed(context, "B");
                 }
               },

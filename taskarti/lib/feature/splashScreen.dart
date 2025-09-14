@@ -18,7 +18,9 @@ class _SplashscreenState extends State<Splashscreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 2), () {
-    KHive.popUserBox(KHive.boolKey)!=null?Navigator.pushReplacementNamed(context, "B"):Navigator.pushReplacementNamed(context, "A");
+      KHive.popUserBox(KHive.boolKey) != null
+          ? Navigator.pushReplacementNamed(context, "B")
+          : Navigator.pushReplacementNamed(context, "A");
     });
   }
 

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:taskarti/Widget/widget.dart';
+import 'package:taskarti/hive/hive.dart';
+import 'package:taskarti/hive/modelTask.dart';
 import 'package:taskarti/utils/ConstantFonts.dart';
 import 'package:taskarti/utils/ConstantsColors.dart';
 import 'package:intl/intl.dart';
+
+List<Color> color = [Kcolors.maiColor, Kcolors.orange, Kcolors.red];
 
 class AddTask extends StatefulWidget {
   AddTask({super.key});
@@ -13,17 +17,19 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-   List<Color> color = [Kcolors.maiColor, Kcolors.orange, Kcolors.red];
+  TextEditingController controllertitle = TextEditingController();
+
+  TextEditingController controllerDescription = TextEditingController();
 
   TextEditingController controllerDate = TextEditingController(
     text: DateFormat("yyyy-MM-dd").format(DateTime.now()),
   );
 
-   TextEditingController controllerStartTime = TextEditingController(
+  TextEditingController controllerStartTime = TextEditingController(
     text: "09:08 PM",
   );
 
-   TextEditingController controllerEndTime = TextEditingController(
+  TextEditingController controllerEndTime = TextEditingController(
     text: "09:08 PM",
   );
 
@@ -35,7 +41,22 @@ class _AddTaskState extends State<AddTask> {
       bottomNavigationBar: SafeArea(
         child: CustomElevatedButton(
           text: "Create Task",
-          onPressed: () {},
+          onPressed: () {
+            var id = controllerDate.text;                     //DateTime.now().toString();
+            KHive.pushTaskModel(
+              id,
+              TaskModel(
+                id: id,
+                title: controllertitle.text,
+                description: controllerDescription.text,
+                date: controllerDate.text,
+                startTime: controllerStartTime.text,
+                endTime: controllerEndTime.text,
+                color: iconIndex,
+              ),
+            );
+            Navigator.pushReplacementNamed(context, "B");
+          },
           horozantialPadding: 16,
         ),
       ),
@@ -72,7 +93,10 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               Gap(5),
-              CustomTextFormField(hint: "Enter title",),
+              CustomTextFormField(
+                hint: "Enter title",
+                controller: controllertitle,
+              ),
               Gap(10),
               Text(
                 "Description",
@@ -82,7 +106,11 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               Gap(5),
-              CustomTextFormField(hint: "Enter description", maxLines: 3,),
+              CustomTextFormField(
+                hint: "Enter description",
+                maxLines: 3,
+                controller: controllerDescription,
+              ),
               Gap(10),
               Text(
                 "Date",
@@ -92,15 +120,21 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               Gap(5),
-              CustomTextFormField(onTap: () async{
-             var Result = await  showDatePicker(context: context, firstDate: DateTime(2025), lastDate:DateTime(2050));
-                             if(Result!=null){
-                            setState(() {
-                              controllerDate.text =DateFormat('yyy/MM/dd').format(Result);
-                            });
-                          }
-           
-              },
+              CustomTextFormField(
+                onTap: () async {
+                  var Result = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime(2025),
+                    lastDate: DateTime(2050),
+                  );
+                  if (Result != null) {
+                    setState(() {
+                      controllerDate.text = DateFormat(
+                        "yyyy-MM-dd",
+                      ).format(Result);
+                    });
+                  }
+                },
                 suffixIcon: Icon(Icons.date_range_outlined),
                 controller: controllerDate,
                 readOnly: true,
@@ -121,10 +155,14 @@ class _AddTaskState extends State<AddTask> {
                           ),
                         ),
                         Gap(5),
-                        CustomTextFormField(onTap: () async{
-                        var Result = await showTimePicker(context: context, initialTime:TimeOfDay.now());
-                      result( Result,controllerStartTime);
-                        },
+                        CustomTextFormField(
+                          onTap: () async {
+                            var Result = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            result(Result, controllerStartTime);
+                          },
                           suffixIcon: Icon(Icons.date_range_outlined),
                           controller: controllerStartTime,
                           readOnly: true,
@@ -144,10 +182,14 @@ class _AddTaskState extends State<AddTask> {
                           ),
                         ),
                         Gap(5),
-                        CustomTextFormField(onTap: () async{
-                      var Result =  await showTimePicker(context: context, initialTime:TimeOfDay.now());
-                           result( Result,controllerEndTime);
-                        },
+                        CustomTextFormField(
+                          onTap: () async {
+                            var Result = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            result(Result, controllerEndTime);
+                          },
                           suffixIcon: Icon(Icons.date_range_outlined),
                           controller: controllerEndTime,
                           readOnly: true,
@@ -190,11 +232,12 @@ class _AddTaskState extends State<AddTask> {
       ),
     );
   }
-  void result(dynamic Result,dynamic controller){
-                              if(Result!=null){
-                            setState(() {
-                              controller.text =Result.format(context);
-                            });
-                          }
+
+  void result(dynamic Result, dynamic controller) {
+    if (Result != null) {
+      setState(() {
+        controller.text = Result.format(context);
+      });
+    }
   }
 }

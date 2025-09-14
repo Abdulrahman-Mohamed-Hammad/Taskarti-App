@@ -50,7 +50,8 @@ class CustomTextFormField extends StatelessWidget {
     this.hint = "",
     this.maxLines = 1,
     this.suffixIcon,
-    this.readOnly = false,  this.onTap,
+    this.readOnly = false,
+    this.onTap,
   });
   final int maxLines;
   final String hint;
