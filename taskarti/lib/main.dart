@@ -14,6 +14,8 @@ import 'package:taskarti/utils/ConstantsColors.dart';
 void main() async {
   await Hive.initFlutter("Db");
   await KHive.createHiveBox();
+  
+  
   runApp(const MainApp());
 }
 
@@ -22,19 +24,37 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        "A": (context) => Pickerimage(),
-        "B": (context) => Home(),
-        "C": (context) => AddTask(),
-        "D": (context) => ChangeIMageAndNameScreen(),
+    return ValueListenableBuilder(
+      valueListenable: KHive.userBox.listenable(),
+      builder: (context, value, child) {
+        return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          "A": (context) => Pickerimage(),
+          "B": (context) => Home(),
+          "C": (context) => AddTask(),
+          "D": (context) => ChangeIMageAndNameScreen(),
+        },
+        theme: ThemeData(
+            colorScheme: ColorScheme.dark(primary: Kcolors.black,onSurface: Kcolors.black),
+          scaffoldBackgroundColor: Kcolors.white,
+          appBarTheme: AppBarTheme(backgroundColor: Kcolors.white),
+        
+        ),
+        
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.dark(primary: Kcolors.white),
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: Colors.black,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.black,
+      )),
+      themeMode: KHive.popUserBox(KHive.themeModeKey) ==null ? ThemeMode.light:ThemeMode.dark,
+      
+        home: Scaffold(body: Splashscreen()),
+      );
       },
-      theme: ThemeData(
-        scaffoldBackgroundColor: Kcolors.white,
-        appBarTheme: AppBarTheme(backgroundColor: Kcolors.white),
-      ),
-      home: Scaffold(body: Splashscreen()),
+  
     );
   }
 }

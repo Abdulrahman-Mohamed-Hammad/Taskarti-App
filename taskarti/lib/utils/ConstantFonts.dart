@@ -5,7 +5,7 @@ class Kfonts {
   static const String family = "Poppins";
 
   static TextStyle? textStyle({
-    Color color = Kcolors.black,
+    Color? color ,
     double fontSize = 14,
     fontWeight = FontWeight.w400,
   }) {

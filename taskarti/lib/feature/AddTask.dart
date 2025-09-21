@@ -7,17 +7,18 @@ import 'package:taskarti/utils/ConstantFonts.dart';
 import 'package:taskarti/utils/ConstantsColors.dart';
 import 'package:intl/intl.dart';
 
-List<Color> color = [Kcolors.maiColor, Kcolors.orange, Kcolors.red];
+List<Color> color = [Kcolors.maiColor, Kcolors.orange, Kcolors.red,Colors.green];
 
 class AddTask extends StatefulWidget {
-  AddTask({super.key});
+  final TaskModel? model;
+  const AddTask({super.key, this.model});
 
   @override
   State<AddTask> createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
-  TextEditingController controllertitle = TextEditingController();
+  late TextEditingController controllertitle = TextEditingController();
 
   TextEditingController controllerDescription = TextEditingController();
 
@@ -36,25 +37,67 @@ class _AddTaskState extends State<AddTask> {
   int iconIndex = 0;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.model != null) {
+      print(widget.model!.id);
+      controllertitle = TextEditingController(text: widget.model!.title);
+      controllerDescription.text = widget.model?.description! ?? "";
+      controllerDate.text = widget.model?.date ?? "";
+      controllerStartTime.text = widget.model?.startTime ?? "";
+      controllerEndTime.text = widget.model?.endTime ?? "";
+      iconIndex = widget.model?.color ?? 0;
+      iconIndex = widget.model!.color;
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    controllertitle.dispose();
+    controllerDescription.dispose();
+    controllerDate.dispose();
+    controllerStartTime.dispose();
+    controllerEndTime.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SafeArea(
         child: CustomElevatedButton(
           text: "Create Task",
           onPressed: () {
-            var id = controllerDate.text;                     //DateTime.now().toString();
-            KHive.pushTaskModel(
-              id,
-              TaskModel(
-                id: id,
+            var id = controllerDate.text; //DateTime.now().toString();
+
+            if (widget.model != null) {
+              widget.model!.copyModel(
                 title: controllertitle.text,
                 description: controllerDescription.text,
                 date: controllerDate.text,
                 startTime: controllerStartTime.text,
                 endTime: controllerEndTime.text,
                 color: iconIndex,
-              ),
-            );
+              );
+              KHive.pushTaskModel(widget.model!.id, widget.model!);
+            } else {
+              KHive.pushTaskModel(
+                id,
+                TaskModel(
+                  id: id,
+                  title: controllertitle.text,
+                  description: controllerDescription.text,
+                  date: controllerDate.text,
+                  startTime: controllerStartTime.text,
+                  endTime: controllerEndTime.text,
+                  color: iconIndex,
+                ),
+              );
+            }
+
             Navigator.pushReplacementNamed(context, "B");
           },
           horozantialPadding: 16,

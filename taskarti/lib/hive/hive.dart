@@ -5,6 +5,8 @@ class KHive {
   static String nameKey = "name";
   static String imageKey = "image";
   static String boolKey = "IsDone";
+
+  static String themeModeKey = "true";
   static late Box userBox;
   static late Box<TaskModel> taskModel;
 
@@ -14,11 +16,11 @@ class KHive {
     taskModel = await Hive.openBox("taskModel");
   }
 
-  static pushUserBox(String key, dynamic value) {
+  static pushUserBox(dynamic key, dynamic value) {
     userBox.put(key, value);
   }
 
-  static popUserBox(dynamic key) {
+  static popUserBox(String key) {
     return userBox.get(key);
   }
 
@@ -28,5 +30,9 @@ class KHive {
 
   static popTaskModel(dynamic key) {
     return taskModel.get(key);
+  }
+
+  static deletTaskModel(dynamic key){
+       taskModel.delete(key);
   }
 }

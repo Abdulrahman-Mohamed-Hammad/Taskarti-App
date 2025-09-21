@@ -17,6 +17,8 @@ class TaskModel {
   String endTime;
   @HiveField(6)
   int color;
+  @HiveField(7)
+  bool isComplete=false;
 
   TaskModel({
     required this.id,
@@ -27,4 +29,23 @@ class TaskModel {
     required this.endTime,
     this.color = 0,
   });
+
+  void copyModel({
+    String? title,
+    String? description,
+    String? date,
+    String? startTime,
+    String? endTime,
+    int? color,bool? isComplete,
+  
+  }) {
+    this.title = title ?? this.title;
+    this.description = description ?? this.description;
+    this.date = date ?? this.date;
+    this.startTime = startTime ?? this.startTime;
+    this.endTime = endTime ?? this.endTime;
+    this.color = color ?? this.color;
+    this.isComplete =isComplete ?? this.isComplete;
+    
+  }
 }
